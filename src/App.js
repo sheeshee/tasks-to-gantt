@@ -1,11 +1,11 @@
-import { Component } from 'react';
-import './App.css';
+import { Component } from 'react'
+import './App.css'
 import Header from './Header'
 import DragAndDrop from './FileLoader'
 import Gantt from './Gantt'
 
 class App extends Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = {
       tasks: undefined
@@ -13,18 +13,18 @@ class App extends Component {
     this.setTasks = this.setTasks.bind(this)
   }
 
-  setTasks(json_tasks){
-    this.setState({tasks: json_tasks})
+  setTasks (jsonTasks) {
+    this.setState({ tasks: jsonTasks })
   }
 
-  render(){
+  render () {
     return (
       <div className="App">
         <Header />
         <DragAndDrop tasks={this.state.tasks} setTasks={this.setTasks} />
         <Gantt tasks={this.state.tasks} />
       </div>
-    );
+    )
   }
 }
-export default App;
+export default App

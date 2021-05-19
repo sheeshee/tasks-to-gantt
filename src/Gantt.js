@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
-import { gantt } from 'dhtmlx-gantt';
-import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+import React, { Component } from 'react'
+import { gantt } from 'dhtmlx-gantt'
+
+import { Task } from './types/Task'
+
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import './Gantt.css'
 
 // const data = {
@@ -14,25 +17,27 @@ import './Gantt.css'
 // };
 
 export default class Gantt extends Component {
-    componentDidMount() {
+  componentDidMount () {
+    // const { tasks } = this.props;
+    gantt.init(this.ganttContainer)
+    gantt.config.readonly = true
+    gantt.config.columns = [
+      { name: 'text', label: 'Task name', width: 150 },
+      { name: 'holder', label: 'Assignee', align: 'center', width: 80 },
+      { name: 'start_date', label: 'Start time', align: 'center', width: 80 }
+    ]
+  }
 
-        // const { tasks } = this.props;
-        gantt.init(this.ganttContainer);
-        gantt.config.readonly = true;
-        gantt.config.columns =  [
-            {name:"text",       label:"Task name", width: 150 },
-            {name:"holder",     label:"Assignee",  align:"center", width: 80 },
-            {name:"start_date", label:"Start time", align:"center", width: 80 },
-        ];
-
-    }
-
-    render() {
-        gantt.parse(this.props.tasks ? this.props.tasks : {data: []});
-       return (
+  render () {
+    gantt.parse(this.props.tasks ? this.props.tasks : { data: [] })
+    return (
            <div className={this.props.tasks ? 'gantt' : 'hidden'}
                 ref={ (input) => { this.ganttContainer = input } }
             ></div>
-       );
-    }
+    )
+  }
+}
+
+Gantt.propTypes = {
+  tasks: Task
 }
