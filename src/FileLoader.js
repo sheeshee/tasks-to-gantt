@@ -16,16 +16,15 @@ function parseXLSX (reader) {
 }
 
 function jsonToTask (json) {
-  console.log(json)
-  const tasks = json.map(obj => {
-    obj.text = obj['Task Name']
-    obj.start_date = obj['Start Date']
-    obj.end_date = '01-01-2022'
-    obj.holder = obj['Assigned To']
-    obj.bucket = obj['Bucket Name']
-    obj.duration = 1
-    return obj
-  })
+  const tasks = json.map(obj => ({
+    ...obj,
+    text: obj['Task Name'],
+    start_date: obj['Start Date'],
+    end_date: '01-01-2022',
+    holder: obj['Assigned To'],
+    bucket: obj['Bucket Name'],
+    duration: 1
+  }))
   return { data: tasks }
 }
 
@@ -62,8 +61,8 @@ class DragAndDrop extends Component {
 
   handleDrop (e) {
     overwrite(e)
-    console.log('Drop Event!')
-    const files = e.dataTransfer.files; const f = files[0]
+    const files = e.dataTransfer.files
+    const f = files[0]
     const reader = new FileReader()
     reader.onload = () => {
       const json = parseXLSX(reader)

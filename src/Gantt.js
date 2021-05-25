@@ -18,7 +18,6 @@ import './Gantt.css'
 
 export default class Gantt extends Component {
   componentDidMount () {
-    // const { tasks } = this.props;
     gantt.init(this.ganttContainer)
     gantt.config.readonly = true
     gantt.config.columns = [
