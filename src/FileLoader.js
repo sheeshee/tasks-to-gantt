@@ -38,6 +38,12 @@ class DragAndDrop extends Component {
   constructor (props) {
     super(props)
     this.handleDrop = this.handleDrop.bind(this)
+    this.handleDragLeave = this.handleDragLeave.bind(this)
+    this.handleDragOver = this.handleDragOver.bind(this)
+
+    this.state = {
+      fileDraggedOver: false
+    }
   }
 
   handleDragEnter (e) {
@@ -46,10 +52,12 @@ class DragAndDrop extends Component {
 
   handleDragLeave (e) {
     overwrite(e)
+    this.setState({ fileDraggedOver: false })
   }
 
   handleDragOver (e) {
     overwrite(e)
+    this.setState({ fileDraggedOver: true })
   }
 
   handleDrop (e) {
@@ -63,11 +71,20 @@ class DragAndDrop extends Component {
       this.props.setTasks(tasks)
     }
     reader.readAsArrayBuffer(f)
+    this.setState({ fileDraggedOver: false })
+  }
+
+  getClassName () {
+    return this.props.tasks
+      ? 'hidden'
+      : 'drag-drop-zone' + (this.state.fileDraggedOver
+        ? ' drag-drop-zone--dashed'
+        : '')
   }
 
   render () {
     return (
-      <div className={this.props.tasks ? 'hidden' : 'drag-drop-zone'}
+      <div className={this.getClassName()}
         onDrop={this.handleDrop}
         onDragOver={this.handleDragOver}
         onDragEnter={this.handleDragEnter}
