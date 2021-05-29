@@ -33,7 +33,7 @@ function overwrite (e) {
   e.stopPropagation()
 }
 
-export function DragAndDrop (props) {
+export function DragAndDrop ({ setTasks, tasks }) {
   const [fileDraggedOver, setFileDraggedOver] = useState(false)
   const handleDragEnter = (e) => { overwrite(e) }
   const handleDragLeave = (e) => {
@@ -52,13 +52,13 @@ export function DragAndDrop (props) {
     reader.onload = () => {
       const json = parseXLSX(reader)
       const tasks = jsonToTask(json)
-      props.setTasks(tasks)
+      setTasks(tasks)
     }
     reader.readAsArrayBuffer(f)
     setFileDraggedOver(false)
   }
   const getClassName = () => {
-    return props.tasks
+    return tasks
       ? 'hidden'
       : 'drag-drop-zone' + (fileDraggedOver
         ? ' drag-drop-zone--dashed'
