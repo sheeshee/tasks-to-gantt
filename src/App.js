@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import './App.css'
 import Header from './Header'
-import DragAndDrop from './FileLoader'
+import { DragAndDrop } from './FileLoader'
 import Gantt from './Gantt'
 
 class App extends Component {

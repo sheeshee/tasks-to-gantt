@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import XLSX from 'xlsx'
 
@@ -33,33 +33,18 @@ function overwrite (e) {
   e.stopPropagation()
 }
 
-class DragAndDrop extends Component {
-  constructor (props) {
-    super(props)
-    this.handleDrop = this.handleDrop.bind(this)
-    this.handleDragLeave = this.handleDragLeave.bind(this)
-    this.handleDragOver = this.handleDragOver.bind(this)
-
-    this.state = {
-      fileDraggedOver: false
-    }
-  }
-
-  handleDragEnter (e) {
+export function DragAndDrop ({ setTasks, tasks }) {
+  const [fileDraggedOver, setFileDraggedOver] = useState(false)
+  const handleDragEnter = (e) => { overwrite(e) }
+  const handleDragLeave = (e) => {
     overwrite(e)
+    setFileDraggedOver(false)
   }
-
-  handleDragLeave (e) {
+  const handleDragOver = (e) => {
     overwrite(e)
-    this.setState({ fileDraggedOver: false })
+    setFileDraggedOver(true)
   }
-
-  handleDragOver (e) {
-    overwrite(e)
-    this.setState({ fileDraggedOver: true })
-  }
-
-  handleDrop (e) {
+  const handleDrop = (e) => {
     overwrite(e)
     const files = e.dataTransfer.files
     const f = files[0]
@@ -67,37 +52,31 @@ class DragAndDrop extends Component {
     reader.onload = () => {
       const json = parseXLSX(reader)
       const tasks = jsonToTask(json)
-      this.props.setTasks(tasks)
+      setTasks(tasks)
     }
     reader.readAsArrayBuffer(f)
-    this.setState({ fileDraggedOver: false })
+    setFileDraggedOver(false)
   }
-
-  getClassName () {
-    return this.props.tasks
+  const getClassName = () => {
+    return tasks
       ? 'hidden'
-      : 'drag-drop-zone' + (this.state.fileDraggedOver
+      : 'drag-drop-zone' + (fileDraggedOver
         ? ' drag-drop-zone--dashed'
         : '')
   }
-
-  render () {
-    return (
-      <div className={this.getClassName()}
-        onDrop={this.handleDrop}
-        onDragOver={this.handleDragOver}
-        onDragEnter={this.handleDragEnter}
-        onDragLeave={this.handleDragLeave}
-      >
-        <p>Drag files here to upload</p>
-      </div>
-    )
-  }
+  return (
+    <div className={getClassName()}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+    >
+      <p>Drag files here to upload</p>
+    </div>
+  )
 }
 
 DragAndDrop.propTypes = {
   tasks: Task,
   setTasks: PropTypes.func
 }
-
-export default DragAndDrop
