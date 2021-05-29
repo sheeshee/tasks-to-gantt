@@ -14,7 +14,7 @@ export function DragAndDrop ({ setTasks, tasks }) {
     const range = ws['!ref']
     const end = range.split(':')[1]
     const newRange = 'A5:' + end
-    const json = XLSX.utils.sheet_to_json(ws, { range: newRange })
+    const json = XLSX.utils.sheet_to_json(ws, { range: newRange, cellDate: false, dateNF: 'yyyy-mm-dd' })
     return json
   }
 
@@ -22,7 +22,7 @@ export function DragAndDrop ({ setTasks, tasks }) {
     const tasks = json.map(obj => ({
       ...obj,
       text: obj['Task Name'],
-      start_date: obj['Start Date'],
+      start_date: obj['Start Date'] ? obj['Start Date'] : '01-01-2022',
       end_date: '01-01-2022',
       holder: obj['Assigned To'],
       bucket: obj['Bucket Name'],

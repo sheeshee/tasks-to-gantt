@@ -2,7 +2,7 @@ import { Component } from 'react'
 import './App.css'
 import Header from './Header'
 import { DragAndDrop } from './FileLoader'
-import Gantt from './Gantt'
+import { Gantt } from './Gantt'
 
 class App extends Component {
   constructor (props) {
@@ -22,7 +22,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <DragAndDrop tasks={this.state.tasks} setTasks={this.setTasks} />
-        <Gantt tasks={this.state.tasks} />
+        {this.state.tasks ? <Gantt tasks={this.state.tasks} /> : null}
       </div>
     )
   }
