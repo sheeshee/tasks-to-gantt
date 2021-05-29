@@ -4,46 +4,50 @@ import XLSX from 'xlsx'
 
 import { Task } from './types/Task'
 
-function parseXLSX (reader) {
-  const workbook = XLSX.read(new Uint8Array(reader.result), { type: 'array' })
-  const firstSheet = workbook.SheetNames[0]
-  const ws = workbook.Sheets[firstSheet]
-  const range = ws['!ref']
-  const end = range.split(':')[1]
-  const newRange = 'A5:' + end
-  const json = XLSX.utils.sheet_to_json(ws, { range: newRange })
-  return json
-}
-
-function jsonToTask (json) {
-  const tasks = json.map(obj => ({
-    ...obj,
-    text: obj['Task Name'],
-    start_date: obj['Start Date'],
-    end_date: '01-01-2022',
-    holder: obj['Assigned To'],
-    bucket: obj['Bucket Name'],
-    duration: 1
-  }))
-  return { data: tasks }
-}
-
-function overwrite (e) {
-  e.preventDefault()
-  e.stopPropagation()
-}
-
 export function DragAndDrop ({ setTasks, tasks }) {
   const [fileDraggedOver, setFileDraggedOver] = useState(false)
+
+  const parseXLSX = (reader) => {
+    const workbook = XLSX.read(new Uint8Array(reader.result), { type: 'array' })
+    const firstSheet = workbook.SheetNames[0]
+    const ws = workbook.Sheets[firstSheet]
+    const range = ws['!ref']
+    const end = range.split(':')[1]
+    const newRange = 'A5:' + end
+    const json = XLSX.utils.sheet_to_json(ws, { range: newRange })
+    return json
+  }
+
+  const jsonToTask = (json) => {
+    const tasks = json.map(obj => ({
+      ...obj,
+      text: obj['Task Name'],
+      start_date: obj['Start Date'],
+      end_date: '01-01-2022',
+      holder: obj['Assigned To'],
+      bucket: obj['Bucket Name'],
+      duration: 1
+    }))
+    return { data: tasks }
+  }
+
+  const overwrite = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   const handleDragEnter = (e) => { overwrite(e) }
+
   const handleDragLeave = (e) => {
     overwrite(e)
     setFileDraggedOver(false)
   }
+
   const handleDragOver = (e) => {
     overwrite(e)
     setFileDraggedOver(true)
   }
+
   const handleDrop = (e) => {
     overwrite(e)
     const files = e.dataTransfer.files
@@ -57,6 +61,7 @@ export function DragAndDrop ({ setTasks, tasks }) {
     reader.readAsArrayBuffer(f)
     setFileDraggedOver(false)
   }
+
   const getClassName = () => {
     return tasks
       ? 'hidden'
@@ -64,6 +69,7 @@ export function DragAndDrop ({ setTasks, tasks }) {
         ? ' drag-drop-zone--dashed'
         : '')
   }
+
   return (
     <div className={getClassName()}
       onDrop={handleDrop}
