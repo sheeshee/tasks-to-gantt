@@ -1,0 +1,34 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "standard",
+    "standard-with-typescript",
+    "plugin:prettier/recommended",
+    "prettier-standard"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    // base rule must be disabled: https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/parser/README.md#configuration
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"]
+  },
+  "settings": {
+    "react": {
+      "version": "latest"
+    }
+  }
+}
